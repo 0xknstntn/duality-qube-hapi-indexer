@@ -1,0 +1,57 @@
+{
+  "name": "duality-hapi-indexer",
+  "version": "2.0.0",
+  "description": "A Node.js based indexer for the Neutron Duality Dex module",
+  "main": "dist/server.js",
+  "scripts": {
+    "prepare": "[ -d '.git' ] && husky install || echo 'skipping husky'",
+    "docker": "docker compose up --build --abort-on-container-exit || true && docker compose down",
+    "build": "esbuild src/server.ts --bundle --external:sqlite3 --platform=node --loader:.sql=text --outdir=dist",
+    "dev:build": "npm run build -- --watch",
+    "dev:start": "nodemon dist/server.js --exec 'rm -f $DB_FILENAME && node'",
+    "dev": "npm run build && concurrently npm:dev:*",
+    "start": "node dist/server.js"
+  },
+  "engines": {
+    "node": "^18.19.0",
+    "npm": "^10.2.3"
+  },
+  "dependencies": {
+    "@chain-registry/client": "^1.15.0",
+    "@hapi/accept": "^6.0.3",
+    "@hapi/hapi": "^21.3.1",
+    "bignumber.js": "^9.1.1",
+    "chain-registry": "^1.20.0",
+    "esbuild": "^0.17.18",
+    "sql-template-tag": "^5.1.0",
+    "sqlite": "^4.2.0",
+    "sqlite3": "^5.1.6",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "@chain-registry/types": "^0.17.0",
+    "@types/hapi": "^18.0.8",
+    "@types/node": "^18.16.3",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "concurrently": "^8.0.1",
+    "cosmjs-types": "^0.8.0",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "formdata-node": "^5.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "nodemon": "^2.0.22",
+    "prettier": "2.8.8",
+    "typescript": "^5.0.4",
+    "undici": "^5.22.0"
+  },
+  "lint-staged": {
+    "**/*.{mjs,js,jsx,ts,tsx,json,css,scss,html,md,yaml,yml}": [
+      "prettier --write"
+    ],
+    "**/*.{mjs,js,jsx,ts,tsx}": [
+      "eslint --max-warnings 0"
+    ]
+  }
+}

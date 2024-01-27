@@ -1,0 +1,18 @@
+version: '3'
+
+#  run development indexer
+services:
+  indexer:
+    build:
+      context: .
+      target: build-env
+      args:
+        - NODE_ENV=development
+    command: 'npm run dev'
+    env_file:
+      - .env
+      - .env.local
+    volumes:
+      - ./src:/usr/workspace/src
+    ports:
+      - '8000:8000'
