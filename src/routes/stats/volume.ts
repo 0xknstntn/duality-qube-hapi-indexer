@@ -16,7 +16,7 @@ import { getLastBlockHeight } from '../../sync';
 const routes = [
   {
     method: 'GET',
-    path: '/stats/volume/{tokenA}/{tokenB}',
+    path: '/stats/volume',
     handler: async (request: Request, h: ResponseToolkit) => {
       const shape = [
         [
@@ -40,8 +40,8 @@ const routes = [
             const mostRecentMinuteUnix = new Date().setSeconds(0, 0) / 1000;
             const response = await getUnsortedSwapVolumeTimeseries(
               context.swapVolumeCache,
-              params['tokenA'],
-              params['tokenB'],
+              query['tokenA'],
+              query['tokenB'],
               'day',
               {
                 'pagination.before': `${mostRecentMinuteUnix}`,
@@ -67,13 +67,13 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/stats/tvl/{tokenA}/{tokenB}',
+    path: '/stats/tvl',
     handler: async (request: Request, h: ResponseToolkit) => {
       const shape = [
         'time_unix',
         [
-          `amount ${request.params['tokenA']}`,
-          `amount ${request.params['tokenB']}`,
+          `amount ${request.query['tokenA']}`,
+          `amount ${request.query['tokenB']}`,
         ],
       ] as const;
       return processRequest<Plugins, [TotalVolumeTimeseries], typeof shape>(
@@ -87,8 +87,8 @@ const routes = [
             const mostRecentMinuteUnix = new Date().setSeconds(0, 0) / 1000;
             const response = await getUnsortedTotalVolumeTimeseries(
               context.totalVolumeCache,
-              params['tokenA'],
-              params['tokenB'],
+              query['tokenA'],
+              query['tokenB'],
               'day',
               {
                 'pagination.before': `${mostRecentMinuteUnix}`,

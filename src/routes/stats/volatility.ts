@@ -19,7 +19,7 @@ type DataSets = [Array<DataRow>];
 const routes = [
   {
     method: 'GET',
-    path: '/stats/volatility/{tokenA}/{tokenB}',
+    path: '/stats/volatility',
     handler: async (request: Request, h: ResponseToolkit) => {
       return processRequest<Plugins, DataSets, Shape>(request, h, {
         shape,
@@ -45,8 +45,8 @@ const getData: GetEndpointData<Plugins, DataSets> = async (
 
   const dataPromise = getUnsortedPairPriceTimeseries(
     context.pairPriceCache,
-    params['tokenA'],
-    params['tokenB'],
+    query['tokenA'],
+    query['tokenB'],
     'day',
     {
       'pagination.before': `${nowUnix}`,
@@ -55,8 +55,8 @@ const getData: GetEndpointData<Plugins, DataSets> = async (
   );
 
   const invertedOrderPromise = hasInvertedOrder(
-    params['tokenA'],
-    params['tokenB']
+    query['tokenA'],
+    query['tokenB']
   );
 
   const [data, invertedOrder] = await Promise.all([

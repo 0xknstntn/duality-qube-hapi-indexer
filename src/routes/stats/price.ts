@@ -18,7 +18,7 @@ type DataSets = [PairPriceTimeseries];
 const routes = [
   {
     method: 'GET',
-    path: '/stats/price/{tokenA}/{tokenB}',
+    path: '/stats/price',
     handler: async (request: Request, h: ResponseToolkit) => {
       return processRequest<Plugins, DataSets, Shape>(request, h, {
         shape,
@@ -42,8 +42,8 @@ const getData: GetEndpointData<Plugins, DataSets> = async (
   const mostRecentMinuteUnix = new Date().setSeconds(0, 0) / 1000;
   const response = await getUnsortedPairPriceTimeseries(
     context.pairPriceCache,
-    params['tokenA'],
-    params['tokenB'],
+    query['tokenA'],
+    query['tokenB'],
     'day',
     {
       'pagination.before': `${mostRecentMinuteUnix}`,
