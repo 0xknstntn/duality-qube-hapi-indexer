@@ -99,7 +99,7 @@ const qubeAsset: AssetList = {
         }
       ],
       base: "uatom",
-      name: "Cosmo",
+      name: "Cosmos",
       display: "atom",
       symbol: "ATOM",
       logo_URIs: {

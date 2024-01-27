@@ -18,7 +18,7 @@ const defaultPaginationLimit = 10000;
 const routes = [
   {
     method: 'GET',
-    path: '/liquidity/token/{tokenA}/{tokenB}',
+    path: '/liquidity/token',
     handler: async (request: Request, h: ResponseToolkit) => {
       return processRequest<Plugins, DataSets, Shape>(request, h, {
         shape,
@@ -39,8 +39,8 @@ const getData: GetEndpointData<Plugins, DataSets> = async (
 ) => {
   const data = await getHeightedTokenPairLiquidity(
     context.tickLiquidityCache,
-    params['tokenA'],
-    params['tokenB'],
+    query['tokenA'],
+    query['tokenB'],
     query
   );
   if (data) {
