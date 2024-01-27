@@ -34,7 +34,7 @@ RUN NODE_ENV=${NODE_ENV} npm ci
 COPY . .
 
 # expose container port
-EXPOSE 8000
+EXPOSE 5785
 
 # build bundled code
 RUN npm run build

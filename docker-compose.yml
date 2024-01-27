@@ -15,4 +15,4 @@ services:
     volumes:
       - ./src:/usr/workspace/src
     ports:
-      - '8000:8000'
+      - '5785:5785'

@@ -22,8 +22,8 @@ function safeReadFileText(filename: string) {
 }
 
 const {
-  NODE_ENV = 'development',
-  PORT = '8000',
+  NODE_ENV = 'production',
+  PORT = '5785',
   RPC_API = 'http://89.108.83.252:26657',
   // by default allow all CORS origins in non-production environments only
   CORS_ALLOWED_ORIGIN = NODE_ENV === 'development' ? '' : '*',
@@ -119,7 +119,7 @@ const init = async () => {
   const server = Hapi.server({
     port: PORT,
     // host: 0.0.0.0 resolves better than host: localhost in a Docker container
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     routes: {
       cors: {
         origin: [CORS_ALLOWED_ORIGIN],
