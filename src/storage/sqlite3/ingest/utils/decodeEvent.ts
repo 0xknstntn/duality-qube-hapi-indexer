@@ -21,7 +21,7 @@ export default function decodeEvent(
     type,
     attributes: attributes.reduce<DecodedAttributeMap>(
       (acc, { key = '', value = '' }) => {
-        acc[key] = value;
+        acc[atob(key)] = atob(value);
         return acc;
       },
       {}

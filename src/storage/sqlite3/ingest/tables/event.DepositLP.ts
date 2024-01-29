@@ -12,9 +12,9 @@ export default async function insertEventDeposit(
   index: number
 ) {
   return await db.run(
-    ...prepare(sql`
+    ...prepare(sql `
     INSERT INTO 'event.DepositLP' (
-
+  
       'Creator',
       'Receiver',
       'TokenZero',
@@ -24,7 +24,7 @@ export default async function insertEventDeposit(
       'ReservesZeroDeposited',
       'ReservesOneDeposited',
       'SharesMinted',
-
+  
       'related.tx_result.events',
       'related.dex.pair'
     ) values (
@@ -37,7 +37,7 @@ export default async function insertEventDeposit(
       ${txEvent.attributes['ReservesZeroDeposited']},
       ${txEvent.attributes['ReservesOneDeposited']},
       ${txEvent.attributes['SharesMinted']},
-
+  
       (
         SELECT
           'tx_result.events'.'id'

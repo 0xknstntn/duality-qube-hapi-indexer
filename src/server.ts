@@ -119,7 +119,8 @@ const init = async () => {
   const server = Hapi.server({
     port: PORT,
     // host: 0.0.0.0 resolves better than host: localhost in a Docker container
-    host: '127.0.0.1',
+    //host: '127.0.0.1',
+    host: '0.0.0.0',
     routes: {
       cors: {
         origin: [CORS_ALLOWED_ORIGIN],

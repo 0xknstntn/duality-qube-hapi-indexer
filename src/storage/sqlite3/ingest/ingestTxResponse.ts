@@ -1,5 +1,5 @@
 import { TxResponse } from '../../../@types/tx';
-
+import { Buffer } from "buffer";
 import insertDexTokensRows from './tables/dex.tokens';
 import insertDexPairsRows from './tables/dex.pairs';
 import insertBlockRows from './tables/block';
@@ -34,9 +34,33 @@ export default async function ingestTxs(
       continue;
     }
 
-    // get tx events in decoded form
+    const txEvents = (tx_result.events || []).map(decodeEvent);
+    for (const txEvent of txEvents) {
+      console.log("QLABS: ", txEvent.attributes)
+    }
+
     //console.log(JSON.parse(tx_result.log)[0].events)
-    const txEvents = (JSON.parse(tx_result.log)[0].events|| []).map(decodeEvent);
+    /*const txEvents = (JSON.parse(tx_result.log)[0].events || []).map(decodeEvent);
+    let temp_event = tx_result.height == '1425112' ? (JSON.parse(tx_result.log)[0].events || []) : []
+    for (let index = 0; index < temp_event.length; index++) {
+      let event = temp_event[index]
+      //console.log(event)
+      if(event.type == "message"){
+        console.log("\n\n\n\n\n\n\nEVENT ::::::: ", index)
+        for (let index1 = 0; index1 < event.attributes.length; index1++) {
+          console.log("QLABS: DEBUG: EVENT: ", event.attributes[index1] )
+          
+        }
+        console.log("EVENT ::::::: END\n\n\n\n\n\n", index)
+      } 
+
+    }*/
+    //const txEvents = (tx_result.events || []).map(decodeEvent);
+
+    //console.log("QLABS: DEBUG: ",  tx_result.height == '1425112' ? JSON.parse(tx_result.log)[0].events : "")
+    //console.log("QLABS: DEBUG: ", tx_result.events)
+    //console.log(txEvents)
+
 
     // first add block rows
     timer.start('processing:txs:block');
@@ -85,6 +109,8 @@ export default async function ingestTxs(
         switch (dexAction) {
           case 'DepositLP':
             timer.start('processing:txs:event.DepositLP');
+            //console.log("\n\n\n\n\n\n\n")
+            //console.log("QLABS: DEBUG: ", txEvent)
             await insertEventDeposit(tx_result, txEvent, index);
             timer.stop('processing:txs:event.DepositLP');
             break;
