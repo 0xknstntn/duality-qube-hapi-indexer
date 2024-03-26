@@ -36,7 +36,7 @@ export default async function ingestTxs(
 
     const txEvents = (tx_result.events || []).map(decodeEvent);
     for (const txEvent of txEvents) {
-      console.log("QLABS: ", txEvent.attributes)
+      //console.log("QLABS: ", txEvent.attributes)
     }
 
     //console.log(JSON.parse(tx_result.log)[0].events)

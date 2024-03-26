@@ -129,7 +129,7 @@ const init = async () => {
       },
     },
     listener: rawServer as Server,
-    tls: isSecure,
+    tls: false,
   });
 
   await server.register(globalPlugins);

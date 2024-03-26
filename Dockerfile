@@ -33,9 +33,6 @@ RUN NODE_ENV=${NODE_ENV} npm ci
 # copy app source to destination container
 COPY . .
 
-# expose container port
-EXPOSE 5785
-
 # build bundled code
 RUN npm run build
 
@@ -57,6 +54,9 @@ COPY --from=build-env /usr/workspace/dist /usr/workspace/dist
 # Copy SSL certs if defined from given SSL_FILES_DIRECTORY, or defaulting to CWD
 ARG SSL_FILES_DIRECTORY=/
 COPY --from=build-env /usr/workspace$SSL_FILES_DIRECTORY*.pem /usr/workspace$SSL_FILES_DIRECTORY
+
+# expose container port
+EXPOSE 5785
 
 # start node
 CMD node dist/server.js
