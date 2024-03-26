@@ -28,10 +28,6 @@ const {
   // by default allow all CORS origins in non-production environments only
   CORS_ALLOWED_ORIGIN = NODE_ENV === 'development' ? '' : '*',
   ALLOW_ROUTES_BEFORE_SYNCED = '',
-  SSL_PRIVATE_KEY_FILE = 'ssl-key.pem',
-  SSL_PUBLIC_KEY_FILE = 'ssl-cert.pem',
-  SSL_PRIVATE_KEY = safeReadFileText(SSL_PRIVATE_KEY_FILE) || '',
-  SSL_PUBLIC_KEY = safeReadFileText(SSL_PUBLIC_KEY_FILE) || '',
 } = process.env;
 
 async function testConnection(apiUrl: string): Promise<boolean> {
@@ -91,28 +87,7 @@ const init = async () => {
   // depending on whether SSL keys are available
   let isSecure = false;
   let rawServer: (Http2SecureServer & Partial<Server>) | Server | null = null;
-  try {
-    if (!SSL_PUBLIC_KEY || !SSL_PRIVATE_KEY) {
-      throw new Error('Cannot create secure server without keys');
-    }
-    // add HTTP2 server with added properties to bring in line with HTTP server
-    rawServer = http2.createSecureServer({
-      key: SSL_PRIVATE_KEY,
-      cert: SSL_PUBLIC_KEY,
-    }) as Http2SecureServer & Partial<Server>;
-    rawServer.maxHeadersCount = null;
-    rawServer.maxRequestsPerSocket = null;
-    rawServer.timeout = 5 * minutes * inMs;
-    rawServer.headersTimeout = 1 * minutes * inMs;
-    rawServer.keepAliveTimeout = 1 * minutes * inMs;
-    rawServer.requestTimeout = 5 * minutes * inMs;
-    rawServer.closeAllConnections = () => undefined;
-    rawServer.closeIdleConnections = () => undefined;
-    isSecure = true;
-  } catch (e) {
-    logger.info(`Could not create secure server: ${(e as Error)?.message}`);
-    rawServer = http.createServer();
-  }
+  rawServer = http.createServer();
 
   // start server before adding in indexer routes
   // (so that the server may report the indexing status)
@@ -129,7 +104,6 @@ const init = async () => {
       },
     },
     listener: rawServer as Server,
-    tls: false,
   });
 
   await server.register(globalPlugins);
