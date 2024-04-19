@@ -19,7 +19,7 @@ const defaultPaginationLimit = 100;
 const routes = [
   {
     method: 'GET',
-    path: '/timeseries/price/{tokenA}/{tokenB}/{resolution?}',
+    path: '/timeseries/price',
     handler: async (request: Request, h: ResponseToolkit) => {
       return processRequest<Plugins, DataSets, Shape>(request, h, {
         shape,
@@ -39,9 +39,9 @@ const getData: GetEndpointData<Plugins, DataSets> = async (
 ) => {
   const result = await getUnsortedPairPriceTimeseries(
     context.pairPriceCache,
-    params['tokenA'],
-    params['tokenB'],
-    params['resolution'],
+    query['tokenA'],
+    query['tokenB'],
+    query['resolution'],
     query // the time extents and frequency and such
   );
   return result;

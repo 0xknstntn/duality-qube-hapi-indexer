@@ -18,7 +18,7 @@ const defaultPaginationLimit = 100;
 const routes = [
   {
     method: 'GET',
-    path: '/timeseries/volume/{tokenA}/{tokenB}/{resolution?}',
+    path: '/timeseries/volume',
     handler: async (request: Request, h: ResponseToolkit) => {
       const shape = [
         [
@@ -39,9 +39,9 @@ const routes = [
           getData: async (params, query, context) => {
             const result = await getUnsortedSwapVolumeTimeseries(
               context.swapVolumeCache,
-              params['tokenA'],
-              params['tokenB'],
-              params['resolution'],
+              query['tokenA'],
+              query['tokenB'],
+              query['resolution'],
               query // the time extents and frequency and such
             );
             return result;
@@ -66,7 +66,7 @@ const routes = [
 
   {
     method: 'GET',
-    path: '/timeseries/tvl/{tokenA}/{tokenB}/{resolution?}',
+    path: '/timeseries/tvl',
     handler: async (request: Request, h: ResponseToolkit) => {
       const shape = [
         'time_unix',
@@ -83,9 +83,9 @@ const routes = [
           getData: async (params, query, context) => {
             const result = await getUnsortedTotalVolumeTimeseries(
               context.totalVolumeCache,
-              params['tokenA'],
-              params['tokenB'],
-              params['resolution'],
+              query['tokenA'],
+              query['tokenB'],
+              query['resolution'],
               query // the time extents and frequency and such
             );
             return result;
